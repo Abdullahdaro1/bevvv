@@ -47,8 +47,14 @@ model User {
   email         String?   @unique
   emailVerified DateTime?
   image         String?
+  role          Role    @default(VOLUNTEER) // Can be either "volunteer" or "organization"
   accounts      Account[]
   sessions      Session[]
+}
+
+enum Role {
+  VOLUNTEER
+  ORGANIZATION
 }
 
 model VerificationToken {

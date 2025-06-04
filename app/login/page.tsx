@@ -7,6 +7,8 @@ import {
   CardTitle
 } from '@/components/ui/card';
 import { signIn } from '@/lib/auth';
+import { RoleSelector } from '../components/loging/RoleSelector';
+
 
 export default function LoginPage() {
   return (
@@ -18,29 +20,36 @@ export default function LoginPage() {
             Sign in with your GitHub or Google account.
           </CardDescription>
         </CardHeader>
+        <div className="px-6 py-4">
+          <RoleSelector />
+        </div>
         <CardFooter className="flex flex-col gap-4">
           <form
-            action={async () => {
+            action={async (formData: FormData) => {
               'use server';
+              const role = formData.get('role') as string;
               await signIn('github', {
-                redirectTo: '/dashboard'
+                redirectTo: '/dashboard',
+                role
               });
             }}
             className="w-full"
           >
             <Button className="w-full">Sign in with GitHub</Button>
           </form>
-          <Button
-            onClick={async () => {
+          <form
+            action={async (formData: FormData) => {
               'use server';
+              const role = formData.get('role') as string;
               await signIn('google', {
-                redirectTo: '/dashboard'
+                redirectTo: '/dashboard',
+                role
               });
             }}
             className="w-full"
           >
-            Sign in with google
-          </Button>
+            <Button className="w-full">Sign in with Google</Button>
+          </form>
         </CardFooter>
       </Card>
     </div>

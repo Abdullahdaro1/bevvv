@@ -1,7 +1,7 @@
 import NextAuth from "next-auth"
 import GitHub from "next-auth/providers/github"
 import Google from "next-auth/providers/google"
- 
+
 export const { handlers, signIn, signOut, auth } = NextAuth({
   providers: [GitHub, Google({
     clientId: process.env.GOOGLE_CLIENT_ID,
@@ -14,4 +14,22 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
       }
     }
   })],
+  session: {
+    strategy: "jwt"
+  },
+  callbacks: {
+    async jwt({ token, user, account, profile, trigger, session }) {
+      if (user) {
+        const role = (account?.role as string) || user.role || 'VOLUNTEER';
+        token.role = role;
+      }
+      return token;
+    },
+    async session({ session, token }) {
+      if (session.user) {
+        session.user.role = token.role;
+      }
+      return session;
+    }
+  }
 })

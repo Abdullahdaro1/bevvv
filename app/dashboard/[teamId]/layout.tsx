@@ -17,8 +17,8 @@ const navigationItems: SidebarItem[] = [
     name: 'Management',
   },
   {
-    name: "Products",
-    href: "/products",
+    name: "Create CV",
+    href: "/2",
     icon: ShoppingBag,
     type: "item",
   },
@@ -93,6 +93,8 @@ export default function Layout(props: { children: React.ReactNode }) {
     router.push('/dashboard');
     return null;
   }
+
+  console.log('Session data:', session);
 
   return (
     <SidebarLayout 

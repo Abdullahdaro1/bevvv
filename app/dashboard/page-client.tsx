@@ -16,6 +16,8 @@ export function PageClient() {
     },
   });
 
+  console.log('Session data:', session);
+
   if (status === "loading") {
     return <div>Loading...</div>;
   }
