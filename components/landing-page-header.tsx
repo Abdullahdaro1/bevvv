@@ -22,14 +22,14 @@ function SignInSignUpButtons() {
   return (
     <>
       <Link
-        href={""}
+        href={"/login"}
         className={buttonVariants({ variant: "secondary" })}
       >
         Sign In
       </Link>
 
       <Link
-        href={""}
+        href={"/login"}
         className={buttonVariants({ variant: "default" })}
       >
         Sign Up

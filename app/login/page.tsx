@@ -1,57 +1,56 @@
-import { Button } from '@/components/ui/button';
+// app/login/page.tsx
+'use client';
+
+import { Button } from "@/components/ui/button";
 import {
   Card,
   CardDescription,
   CardFooter,
   CardHeader,
-  CardTitle
-} from '@/components/ui/card';
-import { signIn } from '@/lib/auth';
-import { RoleSelector } from '../components/loging/RoleSelector';
-
+  CardTitle,
+} from "@/components/ui/card";
+import { signIn } from "next-auth/react";
+import { LandingPageHeader } from "@/components/landing-page-header";
 
 export default function LoginPage() {
   return (
-    <div className="min-h-screen flex justify-center items-start md:items-center p-8">
+    <>
+    <LandingPageHeader />
+    <div className="min-h-screen flex items-center justify-center p-8">
       <Card className="w-full max-w-sm">
         <CardHeader>
           <CardTitle className="text-2xl">Login</CardTitle>
           <CardDescription>
-            Sign in with your GitHub or Google account.
+            Sign in with GitHub or Google as a Volunteer or Organization.
           </CardDescription>
         </CardHeader>
-        <div className="px-6 py-4">
-          <RoleSelector />
-        </div>
-        <CardFooter className="flex flex-col gap-4">
-          <form
-            action={async (formData: FormData) => {
-              'use server';
-              const role = formData.get('role') as string;
-              await signIn('github', {
-                redirectTo: '/dashboard',
-                role
-              });
-            }}
+        <CardFooter className="flex flex-col gap-4 px-6 py-4">
+          {/* Volunteer button calls the “google‐volunteer” provider */}
+          <Button
+            onClick={() =>
+              signIn("google-volunteer", {
+                callbackUrl: "/volunteer-dashboard",
+              })
+            }
             className="w-full"
           >
-            <Button className="w-full">Sign in with GitHub</Button>
-          </form>
-          <form
-            action={async (formData: FormData) => {
-              'use server';
-              const role = formData.get('role') as string;
-              await signIn('google', {
-                redirectTo: '/dashboard',
-                role
-              });
-            }}
+            Google → Volunteer
+          </Button>
+
+          {/* Organization button calls the “google‐organization” provider */}
+          <Button
+            onClick={() =>
+              signIn("google-organization", {
+                callbackUrl: "/organization-dashboard",
+              })
+            }
             className="w-full"
           >
-            <Button className="w-full">Sign in with Google</Button>
-          </form>
+            Google → Organization
+          </Button>
         </CardFooter>
       </Card>
     </div>
+    </>
   );
 }
