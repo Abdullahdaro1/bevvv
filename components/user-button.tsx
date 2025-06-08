@@ -25,7 +25,7 @@ export function UserButton() {
   const userInitials = session.user.name
     ? session.user.name
         .split(" ")
-        .map((n) => n[0])
+        .map((n: string) => n[0])
         .join("")
         .toUpperCase()
     : "U";
@@ -62,10 +62,6 @@ export function UserButton() {
               <span>Light Mode</span>
             </>
           )}
-        </DropdownMenuItem>
-        <DropdownMenuItem>
-          <User className="mr-2 h-4 w-4" />
-          <span>Profile</span>
         </DropdownMenuItem>
         <DropdownMenuSeparator />
         <DropdownMenuItem onClick={() => signOut()}>

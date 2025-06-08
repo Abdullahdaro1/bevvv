@@ -23,7 +23,7 @@ export function PageClient() {
   }
 
   // If we have a session, redirect to the user's dashboard
-  if (session?.user) {
+  if (session?.user && session?.user?.role === 'VOLUNTEER') {
     router.push(`/volunteer-dashboard/${session.user.id}`);
   }
 

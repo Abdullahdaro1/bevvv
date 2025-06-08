@@ -35,7 +35,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
       if (!user.email) return false;
       // Determine role by inspecting account.provider
       let role: "VOLUNTEER" | "ORGANIZATION" = "VOLUNTEER";
-      if (account.provider === "google-organization") {
+      if (account?.provider === "google-organization") {
         role = "ORGANIZATION";
       }
       try {

@@ -2,10 +2,8 @@
 
 import SidebarLayout, { SidebarItem } from "@/components/sidebar-layout";
 import { useSession } from "next-auth/react";
-import { BadgePercent, BarChart4, Columns3, Globe, Locate, Settings2, ShoppingBag, ShoppingCart, Users, User } from "lucide-react";
+import { BadgePercent, BarChart4, Columns3, Globe, Locate, Settings2, ShoppingBag, ShoppingCart, Users } from "lucide-react";
 import { useParams, useRouter } from "next/navigation";
-import { useEffect } from "react";
-import { Footer } from "@/components/footer";
 
 const navigationItems: SidebarItem[] = [
   {
@@ -15,40 +13,34 @@ const navigationItems: SidebarItem[] = [
     type: "item",
   },
   {
-    name: "Profile",
-    href: "/profile",
-    icon: User,
-    type: "item",
-  },
-  {
     type: 'label',
     name: 'Management',
   },
   {
-    name: "My Projects",
-    href: "/my-projects",
+    name: "Create CV",
+    href: "/create-cv",
     icon: ShoppingBag,
     type: "item",
   },
-  {
-    name: "Forms",
-    href: "/forms",
+/*   {
+    name: "People",
+    href: "/people",
     icon: Users,
     type: "item",
   },
   {
-    name: "Recruitment",
-    href: "/recruitment",
+    name: "Segments",
+    href: "/segments",
     icon: Columns3,
     type: "item",
   },
   {
-    name: "Analytics",
-    href: "/",
+    name: "Regions",
+    href: "/regions",
     icon: Locate,
     type: "item",
   },
-/*   {
+  {
     type: 'label',
     name: 'Monetization',
   },
@@ -69,14 +61,14 @@ const navigationItems: SidebarItem[] = [
     href: "/discounts",
     icon: BadgePercent,
     type: "item",
-  }, */
+  },
   {
     type: 'label',
     name: 'Settings',
-  },
+  }, */
   {
-    name: "Payment",
-    href: "/payment",
+    name: "Configuration",
+    href: "/configuration",
     icon: Settings2,
     type: "item",
   },
@@ -92,27 +84,28 @@ export default function Layout(props: { children: React.ReactNode }) {
   });
   const router = useRouter();
 
-  useEffect(() => {
-    if (session?.user?.id !== params.userId && session?.user?.role !== 'organization') {
-      router.push(`/organization-dashboard/${params.userId}`);
-    }
-  }, [session, params.userId, router]);
-
   if (status === "loading") {
-    return <div>Loading.. organization</div>;
+    return <div>Loading...</div>;
   }
 
+  // Check if the current user is authorized to view this dashboard
+  if (session?.user?.id !== params.userId && session?.user?.role !== 'VOLUNTEER') {
+    router.push('/volunteer-dashboard');
+    return null;
+  }
+
+  console.log('Session data:', session);
+
   return (
-    <>
     <SidebarLayout 
       items={navigationItems}
-      basePath={`/organization-dashboard/${session.user.id}`}
+      basePath={`/volunteer-dashboard/${session.user.id}`}
       baseBreadcrumb={[{
         title: session.user.name || 'Dashboard',
-        href: `/organization-dashboard/${session.user.id}`,
+        href: `/volunteer-dashboard/${session.user.id}`,
       }]}
     >
       {props.children}
-    </SidebarLayout>    </>
+    </SidebarLayout>
   );
 }

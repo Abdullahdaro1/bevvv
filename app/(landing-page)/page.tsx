@@ -7,6 +7,7 @@ import { PricingGrid } from "@/components/pricing";
 import { GitHubLogoIcon } from "@radix-ui/react-icons";
 import { ComponentIcon, Users, ChartNoAxesCombined } from "lucide-react";
 import { Brain, Heart, Clock, Shield, Sparkles } from "lucide-react";
+import Faq from "@/components/faq";
 
 
 export default async function IndexPage() {
@@ -110,6 +111,8 @@ export default async function IndexPage() {
           },
         ]}
       />
+
+      <Faq />
 
       <div id="pricing" />
       {/* <PricingGrid

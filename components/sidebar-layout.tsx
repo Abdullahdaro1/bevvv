@@ -5,7 +5,7 @@ import { LucideIcon, Menu } from "lucide-react";
 import { useTheme } from "next-themes";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { useState } from "react";
+import React, { useState } from "react";
 import {
   Breadcrumb,
   BreadcrumbItem,
@@ -62,7 +62,7 @@ function NavItem(props: {
       onClick={props.onClick}
       prefetch={true}
     >
-      <props.item.icon className="mr-2 h-5 w-5" />
+      <props.item.icon className="mr-2 h-5 w-5 text-tertiary" />
       {props.item.name}
     </Link>
   );
@@ -125,12 +125,12 @@ function HeaderBreadcrumb(props: { items: SidebarItem[], baseBreadcrumb?: Header
     <Breadcrumb>
       <BreadcrumbList>
         {props.baseBreadcrumb?.map((item, index) => (
-          <>
-            <BreadcrumbItem key={index}>
+          <React.Fragment key={index}>
+            <BreadcrumbItem>
               <BreadcrumbLink href={item.href}>{item.title}</BreadcrumbLink>
             </BreadcrumbItem>
-            <BreadcrumbSeparator key={`separator-${index}`} />
-          </>
+            <BreadcrumbSeparator />
+          </React.Fragment>
         ))}
 
         <BreadcrumbItem>
@@ -184,7 +184,6 @@ export default function SidebarLayout(props: {
               <HeaderBreadcrumb baseBreadcrumb={props.baseBreadcrumb} basePath={props.basePath} items={props.items} />
             </div>
           </div>
-
           <UserButton />
         </div>
         <div className="flex-grow">{props.children}</div>

@@ -17,6 +17,8 @@ export function PageClient() {
     },
   });
 
+  console.log(session);
+
   useEffect(() => {
     if (session?.user) {
       router.push(`/organization-dashboard/${session.user.id}`);

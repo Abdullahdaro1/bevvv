@@ -8,12 +8,11 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { Graph } from "./graph";
 import LeaveCard from "@/components/organization/LeaveCard";
 
 export const metadata: Metadata = {
-  title: "Dashboard",
-  description: "Example dashboard app built using the components.",
+  title: "Dashboard for organization",
+  description: "Dashboard for organization",
 };
 
 export default function DashboardPage() {
@@ -27,20 +26,22 @@ export default function DashboardPage() {
           <div className="">
             <LeaveCard />
           </div>
-          <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-7">
+          <div className="">
             <Card className="col-span-4">
               <CardHeader>
-                <CardTitle>Overview</CardTitle>
+                <CardTitle className="text-primary">Your application has been accepted</CardTitle>
+                <CardDescription className="text-sm">
+                  Tell us about yourself - candidates are more likely to trust job openings with completed company pages
+                </CardDescription>
               </CardHeader>
-              <CardContent className="pl-2">
-                <Graph />
-              </CardContent>
             </Card>
-            <Card className="col-span-3">
+          </div>
+          <div className="">
+          <Card className="col-span-3">
               <CardHeader>
-                <CardTitle>Recent Sales</CardTitle>
+                <CardTitle className="text-primary">Track your progress</CardTitle>
                 <CardDescription>
-                  You made 265 sales this month.
+                  You made 2 forms for this month.
                 </CardDescription>
               </CardHeader>
               <CardContent>
