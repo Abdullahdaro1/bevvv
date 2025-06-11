@@ -16,6 +16,7 @@ import { WorkExeriencesSection } from "./WorkExeriences";
 import GeneralInformation from "./generalInformation";
 import { GraduationCap, Briefcase, Wrench, Globe, User, Target } from "lucide-react"
 import { useState } from "react"
+import { toast } from "sonner";
 
 
 export default function DashboardPage() {
@@ -24,6 +25,8 @@ export default function DashboardPage() {
   console.log(session);
 
   const [activeSection, setActiveSection] = useState("general")
+  const [generalFormData, setGeneralFormData] = useState(null);
+  const [isSaving, setIsSaving] = useState(false);
 
   const sections = [
     { id: "general", label: "General Information", icon: User },
@@ -40,6 +43,35 @@ export default function DashboardPage() {
       element.scrollIntoView({ behavior: "smooth" })
     }
   }
+
+  const handleSave = async () => {
+    if (!generalFormData) {
+      toast.error("Please fill in the general information first");
+      return;
+    }
+
+    setIsSaving(true);
+    try {
+      const response = await fetch('/api/volunteer', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(generalFormData),
+      });
+
+      if (!response.ok) {
+        throw new Error('Failed to save data');
+      }
+
+      toast.success('Information saved successfully');
+    } catch (error) {
+      console.error('Error saving data:', error);
+      toast.error('Failed to save information');
+    } finally {
+      setIsSaving(false);
+    }
+  };
 
   return (
     <div className="min-h-screen flex flex-col">
@@ -101,7 +133,7 @@ export default function DashboardPage() {
             </div>
 
             <div id="general" className="scroll-mt-6">
-              <GeneralInformation />
+              <GeneralInformation onFormDataChange={setGeneralFormData} />
             </div>
 
             <div id="education" className="scroll-mt-6">
@@ -145,8 +177,14 @@ export default function DashboardPage() {
                   })}
                 </nav>
               </Card>
-              <button className="w-full mt-6 bg-primary text-white py-2 rounded" disabled>
-                Save
+              <button 
+                className={`w-full mt-6 bg-primary text-white py-2 rounded ${
+                  isSaving ? 'opacity-50 cursor-not-allowed' : ''
+                }`}
+                onClick={handleSave}
+                disabled={isSaving}
+              >
+                {isSaving ? 'Saving...' : 'Save'}
               </button>
             </div>
           </div>

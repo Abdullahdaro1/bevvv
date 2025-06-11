@@ -1,6 +1,8 @@
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { useSession } from "next-auth/react";
+import { toast } from "sonner";
 
 interface FloatingLabelInputProps {
     name: string;
@@ -27,7 +29,13 @@ const FloatingLabelInput = ({ name, value, onChange, label, required = false, ty
     );
 };
 
-export default function GeneralInformation() {
+interface GeneralInformationProps {
+  onFormDataChange: (data: any) => void;
+}
+
+export default function GeneralInformation({ onFormDataChange }: GeneralInformationProps) {
+    const { data: session } = useSession();
+    const [isLoading, setIsLoading] = useState(true);
     const [formData, setFormData] = useState({
         first_name: "",
         second_name: "",
@@ -43,6 +51,55 @@ export default function GeneralInformation() {
         nationality: ""
     });
 
+    // Fetch existing volunteer data
+    useEffect(() => {
+        const fetchVolunteerData = async () => {
+            try {
+                const response = await fetch('/api/volunteer');
+                if (!response.ok) {
+                    throw new Error('Failed to fetch volunteer data');
+                }
+                const data = await response.json();
+                
+                if (data) {
+                    // Format the date to YYYY-MM-DD for the date input
+                    const formattedDate = data.date_of_birth 
+                        ? new Date(data.date_of_birth).toISOString().split('T')[0]
+                        : '';
+                    
+                    setFormData({
+                        first_name: data.first_name || "",
+                        second_name: data.second_name || "",
+                        employeeId: data.employeeId || "A0001",
+                        idNumber: data.idNumber || "0001234567",
+                        phone: data.phone_number || "",
+                        email: session?.user?.email || "",
+                        country: data.country || "",
+                        city: data.city || "",
+                        birthday: formattedDate,
+                        gender: data.gender || "",
+                        maritalStatus: data.maritalStatus || "",
+                        nationality: data.nationality || ""
+                    });
+                }
+            } catch (error) {
+                console.error('Error fetching volunteer data:', error);
+                toast.error('Failed to load existing data');
+            } finally {
+                setIsLoading(false);
+            }
+        };
+
+        if (session?.user?.email) {
+            fetchVolunteerData();
+        }
+    }, [session]);
+
+    // Notify parent component when form data changes
+    useEffect(() => {
+        onFormDataChange(formData);
+    }, [formData, onFormDataChange]);
+
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const { name, value } = e.target;
         setFormData(prev => ({
@@ -57,6 +114,18 @@ export default function GeneralInformation() {
             [name]: value
         }));
     };
+
+    if (isLoading) {
+        return (
+            <Card className="col-span-4">
+                <CardContent className="p-6">
+                    <div className="flex items-center justify-center">
+                        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary"></div>
+                    </div>
+                </CardContent>
+            </Card>
+        );
+    }
 
     return (
         <>
