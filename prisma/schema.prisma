@@ -69,7 +69,6 @@ model Volunteer {
   volunteer_id           String   @id @default(uuid())
   user                   User     @relation(fields: [userId], references: [id], onDelete: Cascade)
   userId                 String   @unique
-
   first_name             String
   second_name            String
   phone_number           String
@@ -86,4 +85,20 @@ model Volunteer {
   languages              String
   created_at             DateTime @default(now())
   interests              String
+  education              Education[]
+}
+
+model Education {
+  id            String   @id @default(uuid())
+  volunteer     Volunteer @relation(fields: [volunteer_id], references: [volunteer_id], onDelete: Cascade)
+  volunteer_id  String
+  level         String   // High School, Bachelor, Master, PhD
+  department    String
+  university    String
+  country       String
+  start_date    DateTime
+  end_date      DateTime?
+  is_present    Boolean  @default(false)
+  created_at    DateTime @default(now())
+  updated_at    DateTime @updatedAt
 }
