@@ -49,6 +49,7 @@ model User {
   role          Role    @default(VOLUNTEER) // Can be either "volunteer" or "organization"
   accounts      Account[]
   sessions      Session[]
+  volunteer     Volunteer?
 }
 
 enum Role {
@@ -62,4 +63,27 @@ model VerificationToken {
   expires    DateTime
 
   @@unique([identifier, token])
+}
+
+model Volunteer {
+  volunteer_id           String   @id @default(uuid())
+  user                   User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId                 String   @unique
+
+  first_name             String
+  second_name            String
+  phone_number           String
+  date_of_birth          DateTime
+  gender                 String
+  country                String
+  city                   String
+  volunteering_status    Boolean  // true = Available, false = Non
+  job_type_id            String   // UUID, you can relate to a JobType table if you have one
+  employment_status      Boolean  // true = employed, false = not
+  skills                 String
+  schedule_of_volunteering_work String
+  time_of_volunteer      Int      // full years
+  languages              String
+  created_at             DateTime @default(now())
+  interests              String
 }
