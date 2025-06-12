@@ -86,6 +86,7 @@ model Volunteer {
   created_at             DateTime @default(now())
   interests              String
   education              Education[]
+  work_experience        WorkExperience[]
 }
 
 model Education {
@@ -99,6 +100,21 @@ model Education {
   start_date    DateTime
   end_date      DateTime?
   is_present    Boolean  @default(false)
+  created_at    DateTime @default(now())
+  updated_at    DateTime @updatedAt
+}
+
+model WorkExperience {
+  id            String   @id @default(uuid())
+  volunteer     Volunteer @relation(fields: [volunteer_id], references: [volunteer_id], onDelete: Cascade)
+  volunteer_id  String
+  company_name  String
+  position      String
+  start_date    DateTime
+  end_date      DateTime?
+  is_present    Boolean  @default(false)
+  description   String
+  country       String
   created_at    DateTime @default(now())
   updated_at    DateTime @updatedAt
 }
