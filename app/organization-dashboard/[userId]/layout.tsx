@@ -92,7 +92,17 @@ export default function Layout(props: { children: React.ReactNode }) {
   });
   const router = useRouter();
 
-  useEffect(() => {
+  if (status === "loading") {
+    return <div>Loading.. organization</div>;
+  }
+
+  // check if the current user is authorized to view theis dashboard 
+  if (session?.user?.id !== params.userId && session?.user?.role !== 'ORGANIZATION') {
+    router.push(`/organization-dashboard/`);
+    return null;
+  }
+
+/*   useEffect(() => {
     if (session?.user?.id !== params.userId && session?.user?.role !== 'organization') {
       router.push(`/organization-dashboard/${params.userId}`);
     }
@@ -100,7 +110,7 @@ export default function Layout(props: { children: React.ReactNode }) {
 
   if (status === "loading") {
     return <div>Loading.. organization</div>;
-  }
+  } */
 
   return (
     <>
@@ -113,6 +123,14 @@ export default function Layout(props: { children: React.ReactNode }) {
       }]}
     >
       {props.children}
-    </SidebarLayout>    </>
+    </SidebarLayout>
+    <Footer 
+      builtBy="Your Organization"
+      builtByLink="https://your-organization.com"
+      githubLink="https://github.com/your-organization"
+      twitterLink="https://twitter.com/your-organization"
+      linkedinLink="https://linkedin.com/company/your-organization"
+    />
+    </>
   );
 }

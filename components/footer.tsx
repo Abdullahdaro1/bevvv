@@ -19,7 +19,7 @@ export function Footer(props: {
   linkedinLink: string;
 }) {
   return (
-    <footer className="border-t">
+    <footer className="">
 {/*       // first part  */}
       <div className="container flex flex-col items-center justify-between bg-current gap-4 px-20 py-12 rounded-[20px] md:flex-row md:gap-2">
         <div className="flex items-center gap-8">

@@ -50,6 +50,7 @@ model User {
   accounts      Account[]
   sessions      Session[]
   volunteer     Volunteer?
+  organization  Organization?
 }
 
 enum Role {
@@ -117,4 +118,28 @@ model WorkExperience {
   country       String
   created_at    DateTime @default(now())
   updated_at    DateTime @updatedAt
+}
+
+model Organization {
+  id                          String   @id @default(uuid())
+  user                        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId                      String   @unique
+  organization_name           String
+  established_date            DateTime
+  organization_type           String
+  organization_size           String
+  organization_website        String?
+  organization_description    String
+  organization_mission        String
+  organization_vision         String
+  organization_goals          String
+  organization_objectives     String
+  organization_activities     String
+  organization_needs          String
+  organization_contract       String
+  organization_preferred_region String
+  organization_email          String
+  organization_reponsible_person String
+  created_at                  DateTime @default(now())
+  updated_at                  DateTime @updatedAt
 }

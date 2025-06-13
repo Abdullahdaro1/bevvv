@@ -62,7 +62,7 @@ function NavItem(props: {
       onClick={props.onClick}
       prefetch={true}
     >
-      <props.item.icon className="mr-2 h-5 w-5 text-tertiary" />
+      <props.item.icon className="mr-2 h-5 w-5 text-primary" />
       {props.item.name}
     </Link>
   );
@@ -153,7 +153,7 @@ export default function SidebarLayout(props: {
 
   return (
     <div className="w-full flex">
-      <div className="flex-col border-r w-[240px] h-screen sticky top-0 hidden md:flex">
+      <div className="flex-col w-[240px] h-screen sticky top-0 hidden md:flex">
         <SidebarContent items={props.items} sidebarTop={props.sidebarTop} basePath={props.basePath} />
       </div>
       <div className="flex flex-col flex-grow w-0">

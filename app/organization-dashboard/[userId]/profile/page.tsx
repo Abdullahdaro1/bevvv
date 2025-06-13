@@ -4,11 +4,36 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Card, CardHeader, CardTitle, CardDescription, CardContent } from "@/components/ui/card";
 import { useSession } from "next-auth/react";
 import Image from "next/image";
+import { useState } from "react";
+import { UserIcon, Briefcase, Globe, User, Target } from "lucide-react"
+import { toast } from "sonner";
+import GeneralInformation from "./generalInformation";
 
 export default function Page() {
   const { data: session } = useSession();
 
   console.log(session);
+
+  const [activeSection, setActiveSection] = useState("general")
+  const [isSaving, setIsSaving] = useState(false);
+
+  const sections = [
+    { id: 'general', label: 'General Information', icon: User },
+    { id: 'mission', label: 'Mission Statement', icon: Globe },
+    { id: 'fields', label: 'Fields of Work', icon: Briefcase },
+  ];
+
+  const scrollToSection = (sectionId: string) => {
+    setActiveSection(sectionId)
+  }
+
+  const handleSave = async () => {
+    setIsSaving(true)
+  }
+
+  const handleFormDataChange = (data: any) => {
+    console.log(data)
+  }
 
   return (
       <div className="flex-col">
@@ -29,59 +54,7 @@ export default function Page() {
           </div>
           <div className="flex flex-row gap-4 w-full justify-between">
             <div className="flex flex-col gap-4 w-full">
-              <Card className="col-span-4">
-                <CardHeader>
-                  <CardTitle className="text-primary text-xl">General Information</CardTitle>
-                </CardHeader>
-                <CardContent className="p-6">
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
-                    {/* Left block */}
-                    <div className="space-y-4">
-                      {/* Row */}
-                      <div className="grid grid-cols-[150px_1fr] items-center gap-x-4">
-                        <div className="font-semibold">Organization ID</div>
-                        <div>A0001</div>
-                      </div>
-                      <div className="grid grid-cols-[150px_1fr] items-center gap-x-4">
-                        <div className="font-semibold">Website</div>
-                        <div>www.Bev.net</div>
-                      </div>
-                      <div className="grid grid-cols-[150px_1fr] items-center gap-x-4">
-                        <div className="font-semibold">Phone</div>
-                        <div>(719) 860-5684</div>
-                      </div>
-                      <div className="grid grid-cols-[150px_1fr] items-center gap-x-4">
-                        <div className="font-semibold">Email</div>
-                        <div>elizabethlopez95@hotmail.com</div>
-                      </div>
-                      <div className="grid grid-cols-[150px_1fr] items-center gap-x-4">
-                        <div className="font-semibold">City</div>
-                        <div>Aleppo</div>
-                      </div>
-                      <div className="grid grid-cols-[150px_1fr] items-center gap-x-4">
-                        <div className="font-semibold">Country</div>
-                        <div>Syria</div>
-                      </div>
-                    </div>
-
-                    {/* Right block */}
-                    <div className="space-y-4">
-                      <div className="grid grid-cols-[150px_1fr] items-center gap-x-4">
-                        <div className="font-semibold">Establish date</div>
-                        <div>May 15, 1995</div>
-                      </div>
-                      <div className="grid grid-cols-[150px_1fr] items-center gap-x-4">
-                        <div className="font-semibold">Total volunteers</div>
-                        <div>0</div>
-                      </div>
-                      <div className="grid grid-cols-[150px_1fr] items-center gap-x-4">
-                        <div className="font-semibold">Responsible person</div>
-                        <div>Single</div>
-                      </div>
-                    </div>
-                  </div>
-                </CardContent>
-              </Card>
+              <GeneralInformation onFormDataChange={handleFormDataChange} />
               <Card>
                 <CardHeader>
                   <CardTitle className="text-primary text-xl">Mission Statement</CardTitle>
@@ -115,13 +88,42 @@ export default function Page() {
                 </CardContent>
               </Card>
             </div>
-            <Card className="w-56 py-4">
-              <ul className="space-y-4 sticky top-0">
-                <li className="font-semibold border-l-4 border-primary pl-2">General Information</li>
-                <li className="hover:text-primary cursor-pointer pl-4">Mission Statement</li>
-                <li className="hover:text-primary cursor-pointer pl-4 ">Fields of Work</li>
-              </ul>
-            </Card>
+
+          {/* Sidebar Navigation */}
+          <div className="w-64 sticky top-[40px]">
+            <div className="sticky top-[40px]">
+              <Card className="py-4">
+                <nav className="space-y-1 px-4">
+                  {sections.map((section) => {
+                    const Icon = section.icon
+                    return (
+                      <button
+                        key={section.id}
+                        onClick={() => scrollToSection(section.id)}
+                        className={`w-full flex items-center gap-3 px-3 py-2 rounded-lg transition-colors duration-200 ${
+                          activeSection === section.id
+                            ? "bg-primary-50 text-primary border-l-4 border-primary"
+                            : "text-gray-600 hover:bg-gray-50 hover:text-primary"
+                        }`}
+                      >
+                        <Icon className="w-5 h-5" />
+                        <span className="text-sm font-medium">{section.label}</span>
+                      </button>
+                    )
+                  })}
+                </nav>
+              </Card>
+              <button 
+                className={`w-full mt-6 bg-primary text-white py-2 rounded ${
+                  isSaving ? 'opacity-50 cursor-not-allowed' : ''
+                }`}
+                onClick={handleSave}
+                disabled={isSaving}
+              >
+                {isSaving ? 'Saving...' : 'Save'}
+              </button>
+            </div>
+          </div>
           </div>
           <div className="">
             <button className="w-full mt-6 bg-primary text-white py-2 rounded" disabled>
